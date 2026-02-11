@@ -33,7 +33,7 @@ end
 
 print("✅ Authorized ID: " .. Player.Name .. " - Anouar777x Hub loaded!")
 
--- === INTERFACE ===
+-- === INTERFACE === (exactement la même que ton original)
 local ScreenGui = Instance.new("ScreenGui", game.CoreGui)
 ScreenGui.Name = "anouar777x_KING"
 ScreenGui.IgnoreGuiInset = true
@@ -130,7 +130,7 @@ Instance.new("UIPadding", ProtectedFrame).PaddingTop = UDim.new(0,4)
 local ProtectedLayout = Instance.new("UIListLayout", ProtectedFrame)
 ProtectedLayout.Padding = UDim.new(0,4)
 
--- ESP Ignored List (NEW)
+-- ESP Ignored List
 local IgnoredFrame = Instance.new("ScrollingFrame", MainFrame)
 IgnoredFrame.Name = "IgnoredESPList"
 IgnoredFrame.Size = UDim2.new(0.8,0,0.20,0)
@@ -153,7 +153,7 @@ IgnoredTitle.TextColor3 = Color3.fromRGB(255,120,120)
 IgnoredTitle.TextScaled = true
 IgnoredTitle.Font = Enum.Font.SourceSansSemibold
 
--- Variables
+-- Variables (inchangées)
 local espEnabled = false
 local AimbotOn = false
 local FOVRadius = 110
@@ -187,7 +187,7 @@ local currentAutoIndex = 1
 local lastSwitchTime = 0
 local SWITCH_INTERVAL = 0.7
 
--- === UTILITY ===
+-- === UTILITY === (inchangé)
 local function IsAlive(char)
     local h = char and char:FindFirstChildOfClass("Humanoid")
     return h and h.Health > 0
@@ -204,7 +204,7 @@ local function IsVisible(part)
     return not result
 end
 
--- === ESP ===
+-- === ESP === (inchangé)
 local function removeESP(char)
     if not char then return end
     local head = char:FindFirstChild("Head")
@@ -219,7 +219,7 @@ end
 local function applyESP(char)
     local plr = Players:GetPlayerFromCharacter(char)
     if not plr or plr == Player then return end
-    if ESPIgnored[plr] then return end   -- ← IMPORTANT : on skip si ignoré
+    if ESPIgnored[plr] then return end
 
     removeESP(char)
 
@@ -337,7 +337,7 @@ ESPToggle.MouseButton1Click:Connect(function()
     refreshAllESP()
 end)
 
--- === Protected + Ignored Lists ===
+-- === Protected + Ignored Lists === (seule partie modifiée : plus de blocage entre les deux)
 local function UpdateLists()
     -- Protected
     for _, b in PlayerButtonsProtected do b:Destroy() end
@@ -356,7 +356,7 @@ local function UpdateLists()
 
             btn.MouseButton1Click:Connect(function()
                 ProtectedPlayers[p] = not ProtectedPlayers[p]
-                if ProtectedPlayers[p] then ESPIgnored[p] = nil end -- incompatibilité
+                -- PLUS DE LIGNE QUI SUPPRIME L'AUTRE STATUT → on peut avoir les deux maintenant
                 UpdateLists()
             end)
         end
@@ -379,7 +379,7 @@ local function UpdateLists()
 
             btn.MouseButton1Click:Connect(function()
                 ESPIgnored[p] = not ESPIgnored[p]
-                if ESPIgnored[p] then ProtectedPlayers[p] = nil end -- incompatibilité
+                -- PLUS DE LIGNE QUI SUPPRIME L'AUTRE STATUT → on peut avoir les deux maintenant
                 UpdateLists()
                 refreshAllESP()
             end)
@@ -395,7 +395,7 @@ Players.PlayerAdded:Connect(UpdateLists)
 Players.PlayerRemoving:Connect(UpdateLists)
 UpdateLists()
 
--- === AIMBOT (inchangé sauf protected check) ===
+-- === AIMBOT (inchangé) ===
 local function GetTargetPart(char)
     local mode = AIM_MODES[currentModeIndex]
     local partName
@@ -468,7 +468,7 @@ RunService.Heartbeat:Connect(function(dt)
     end
 end)
 
--- === BUTTONS ===
+-- === BUTTONS === (inchangé)
 AimbotToggle.MouseButton1Click:Connect(function()
     AimbotOn = not AimbotOn
     AimbotToggle.Text = "Aimbot: " .. (AimbotOn and "ON" or "OFF")
@@ -537,4 +537,4 @@ end
 makeDraggable(MainFrame, MainDrag)
 makeDraggable(ToggleButton, ToggleDrag)
 
-print("Anouar777x Hub LOADED - ESP Ignored List ajouté")
+print("Anouar777x Hub LOADED - Protected & Ignored ESP maintenant indépendants")
